@@ -57,5 +57,20 @@ function create_block_aos_wordpress_hoc_block_init()
         'editor_style' => 'create-block-aos-wordpress-hoc-block-editor',
         'style' => 'create-block-aos-wordpress-hoc-block',
     ));
+
+    // AOS - Style
+    wp_enqueue_style(
+        'aos-style',
+        'https://unpkg.com/aos@next/dist/aos.css',
+        '',
+        'next'
+    );
+
+    // AOS Script
+    wp_enqueue_script('aos-js', 'https://unpkg.com/aos@next/dist/aos.js', array(), 'next', true);
+
+    // AOS init
+    wp_enqueue_script('aos-init', plugins_url('build/aos.js', __FILE__), array('aos-js'), filemtime($dir . '/build/aos.js'), true);
+
 }
 add_action('init', 'create_block_aos_wordpress_hoc_block_init');
