@@ -5,6 +5,8 @@ import { Fragment } from "@wordpress/element";
 import { addFilter } from "@wordpress/hooks";
 import { __ } from "@wordpress/i18n";
 
+const restrictedBlocks = ["core/paragraph"];
+
 /**
  * Add mobile visibility controls on Advanced Block Panel.
  *
@@ -14,7 +16,11 @@ import { __ } from "@wordpress/i18n";
  */
 const withAdvancedControls = createHigherOrderComponent(BlockEdit => {
 	return props => {
-		const { attributes, setAttributes, isSelected } = props;
+		const { name, attributes, setAttributes, isSelected } = props;
+
+		if (!restrictedBlocks.includes(name)) {
+			return <BlockEdit {...props} />;
+		}
 
 		return (
 			<Fragment>

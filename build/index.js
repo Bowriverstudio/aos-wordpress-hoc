@@ -114,6 +114,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+var restrictedBlocks = ["core/paragraph"];
 /**
  * Add mobile visibility controls on Advanced Block Panel.
  *
@@ -124,9 +125,15 @@ __webpack_require__.r(__webpack_exports__);
 
 var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__["createHigherOrderComponent"])(function (BlockEdit) {
   return function (props) {
-    var attributes = props.attributes,
+    var name = props.name,
+        attributes = props.attributes,
         setAttributes = props.setAttributes,
         isSelected = props.isSelected;
+
+    if (!restrictedBlocks.includes(name)) {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props);
+    }
+
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("AOS"),
       initialOpen: false
