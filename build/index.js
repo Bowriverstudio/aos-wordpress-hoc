@@ -97,104 +97,76 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
-/* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
 
 
-/**
- * Registers a new block provided a unique name and an object defining its behavior.
- *
- * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
- */
 
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/packages/packages-i18n/
- */
+
+
 
 
 /**
- * Every block starts by registering a new block type definition.
+ * Add mobile visibility controls on Advanced Block Panel.
  *
- * @see https://developer.wordpress.org/block-editor/developers/block-api/#registering-a-block
+ * @param {function} BlockEdit Block edit component.
+ *
+ * @return {function} BlockEdit Modified block edit component.
  */
 
-Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('create-block/aos-wordpress-hoc', {
-  /**
-   * This is the display title for your block, which can be translated with `i18n` functions.
-   * The block inserter will show this name.
-   */
-  title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Aos Wordpress Hoc', 'create-block'),
-
-  /**
-   * This is a short description for your block, can be translated with `i18n` functions.
-   * It will be shown in the Block Tab in the Settings Sidebar.
-   */
-  description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Example block written with ESNext standard and JSX support – build step required.', 'create-block'),
-
-  /**
-   * Blocks are grouped into categories to help users browse and discover them.
-   * The categories provided by core are `common`, `embed`, `formatting`, `layout` and `widgets`.
-   */
-  category: 'widgets',
-
-  /**
-   * An icon property should be specified to make it easier to identify a block.
-   * These can be any of WordPress’ Dashicons, or a custom svg element.
-   */
-  icon: 'smiley',
-
-  /**
-   * Optional block extended support features.
-   */
-  supports: {
-    // Removes support for an HTML mode.
-    html: false
-  },
-
-  /**
-   * The edit function describes the structure of your block in the context of the editor.
-   * This represents what the editor will render when the block is used.
-   *
-   * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/#edit
-   *
-   * @param {Object} [props] Properties passed from the editor.
-   *
-   * @return {WPElement} Element to render.
-   */
-  edit: function edit(_ref) {
-    var className = _ref.className;
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", {
-      className: className
-    }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Aos Wordpress Hoc – hello from the editor!', 'create-block'));
-  },
-
-  /**
-   * The save function defines the way in which the different attributes should be combined
-   * into the final markup, which is then serialized by the block editor into `post_content`.
-   *
-   * @see https://developer.wordpress.org/block-editor/developers/block-api/block-edit-save/#save
-   *
-   * @return {WPElement} Element to render.
-   */
-  save: function save() {
-    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__["__"])('Aos Wordpress Hoc – hello from the saved content!', 'create-block'));
-  }
-});
+var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__["createHigherOrderComponent"])(function (BlockEdit) {
+  return function (props) {
+    var attributes = props.attributes,
+        setAttributes = props.setAttributes,
+        isSelected = props.isSelected;
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
+      title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("AOS"),
+      initialOpen: false
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, "HELLO World"))));
+  };
+}, "withAdvancedControls");
+Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__["addFilter"])("editor.BlockEdit", "aos/blockeditor", withAdvancedControls);
 
 /***/ }),
 
-/***/ "@wordpress/blocks":
+/***/ "@wordpress/components":
+/*!*********************************************!*\
+  !*** external {"this":["wp","components"]} ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["components"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/compose":
+/*!******************************************!*\
+  !*** external {"this":["wp","compose"]} ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["compose"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/editor":
 /*!*****************************************!*\
-  !*** external {"this":["wp","blocks"]} ***!
+  !*** external {"this":["wp","editor"]} ***!
   \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-(function() { module.exports = this["wp"]["blocks"]; }());
+(function() { module.exports = this["wp"]["editor"]; }());
 
 /***/ }),
 
@@ -206,6 +178,17 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
 /***/ (function(module, exports) {
 
 (function() { module.exports = this["wp"]["element"]; }());
+
+/***/ }),
+
+/***/ "@wordpress/hooks":
+/*!****************************************!*\
+  !*** external {"this":["wp","hooks"]} ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = this["wp"]["hooks"]; }());
 
 /***/ }),
 
