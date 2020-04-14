@@ -108,13 +108,54 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
 
+// import { assign } from "@wordpress/lodash";
+var _lodash = lodash,
+    assign = _lodash.assign;
 
 
 
 
 
 
-var restrictedBlocks = ["core/paragraph"];
+var allowedBlocks = ["core/paragraph"]; // Available spacing control options
+
+var spacingControlOptions = [{
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("None"),
+  value: ""
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("Small"),
+  value: "small"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("Medium"),
+  value: "medium"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("Large"),
+  value: "large"
+}];
+/**
+ * Add custom attribute for mobile visibility.
+ *
+ * @param {Object} settings Settings for the block.
+ *
+ * @return {Object} settings Modified settings.
+ */
+
+function addAttributes(settings) {
+  //add allowedBlocks restriction
+  if (allowedBlocks.includes(settings.name)) {
+    // Use Lodash's assign to gracefully handle if attributes are undefined
+    settings.attributes = assign(settings.attributes, {
+      aosData: {
+        type: "string",
+        default: ""
+      }
+    });
+  }
+
+  return settings;
+}
+
+Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__["addFilter"])("blocks.registerBlockType", "aos/custom-attributes", addAttributes);
 /**
  * Add mobile visibility controls on Advanced Block Panel.
  *
@@ -129,15 +170,26 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
         attributes = props.attributes,
         setAttributes = props.setAttributes,
         isSelected = props.isSelected;
+    var aosData = attributes.aosData;
 
-    if (!restrictedBlocks.includes(name)) {
+    if (!allowedBlocks.includes(name)) {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props);
     }
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("AOS"),
       initialOpen: false
-    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", null, "HELLO World"))));
+    }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["SelectControl"], {
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("aos-data"),
+      value: aosData,
+      options: spacingControlOptions,
+      onChange: function onChange(selectedAOSData) {
+        setAttributes({
+          aosData: selectedAOSData
+        });
+      } // onChange={() => console.log(this)}
+
+    }))));
   };
 }, "withAdvancedControls");
 Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__["addFilter"])("editor.BlockEdit", "aos/blockeditor", withAdvancedControls);
