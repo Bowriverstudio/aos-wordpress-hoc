@@ -10,25 +10,7 @@ import { __ } from "@wordpress/i18n";
 
 const allowedBlocks = ["core/paragraph"];
 
-// Available spacing control options
-const spacingControlOptions = [
-	{
-		label: __("None"),
-		value: ""
-	},
-	{
-		label: __("Small"),
-		value: "small"
-	},
-	{
-		label: __("Medium"),
-		value: "medium"
-	},
-	{
-		label: __("Large"),
-		value: "large"
-	}
-];
+import { spacingControlOptions } from "./aos-data-options";
 
 /**
  * Add custom attribute for mobile visibility.
@@ -94,3 +76,45 @@ const withAdvancedControls = createHigherOrderComponent(BlockEdit => {
 }, "withAdvancedControls");
 
 addFilter("editor.BlockEdit", "aos/blockeditor", withAdvancedControls);
+
+/**
+ * Override props assigned to save component to inject anchor ID, if block
+ * supports anchor. This is only applied if the block's save result is an
+ * element and not a markup string.
+ *
+ * @param {Object} extraProps Additional props applied to save element.
+ * @param {Object} blockType  Block type.
+ * @param {Object} attributes Current block attributes.
+ *
+ * @return {Object} Filtered props applied to save element.
+ */
+function addSaveProps(extraProps, blockType, attributes) {
+	if (!allowedBlocks.includes(blockType.name)) {
+		return extraProps;
+	}
+
+	const { aosData } = attributes;
+
+	if (aosData) {
+		return lodash.assign(extraProps, { "data-aos": aosData });
+
+		console.log(aosData);
+
+		console.log(extraProps);
+		console.log("Name");
+		console.log(blockType.name);
+		console.log(attributes);
+	}
+
+	return extraProps;
+
+	// return lodash.assign(props, { style: { backgroundColor: "red" } });
+}
+
+wp.hooks.addFilter(
+	"blocks.getSaveContent.extraProps",
+	"my-plugin/add-background-color-style",
+	addSaveProps
+);
+
+// addFilter("blocks.getSaveElement", "uikit3/image", addLightboxAttribute);
