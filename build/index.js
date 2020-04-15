@@ -166,7 +166,7 @@ var _lodash = lodash,
 
 
 
-var allowedBlocks = ["core/paragraph"];
+var allowedBlocks = ["core/image", "core/paragraph"];
 
 /**
  * Add custom attribute for mobile visibility.

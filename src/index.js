@@ -8,7 +8,7 @@ import { Fragment } from "@wordpress/element";
 import { addFilter } from "@wordpress/hooks";
 import { __ } from "@wordpress/i18n";
 
-const allowedBlocks = ["core/paragraph"];
+const allowedBlocks = ["core/image", "core/paragraph"];
 
 import { spacingControlOptions } from "./aos-data-options";
 
