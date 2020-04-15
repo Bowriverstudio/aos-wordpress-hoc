@@ -1,7 +1,6 @@
-// import { assign } from "@wordpress/lodash";
 const { assign } = lodash;
 
-import { PanelBody, SelectControl } from "@wordpress/components";
+import { PanelBody, SelectControl, ToggleControl } from "@wordpress/components";
 import { createHigherOrderComponent } from "@wordpress/compose";
 import { InspectorControls } from "@wordpress/editor";
 import { Fragment } from "@wordpress/element";
@@ -11,7 +10,12 @@ import { __ } from "@wordpress/i18n";
 const allowedBlocks = ["core/image", "core/paragraph"];
 
 import { spacingControlOptions } from "./aos-data-options";
+// import { getAOSDefaultValue } from "./aos-default";
+import getAOSDefaultValue from "./get-aos-default-value";
+import isAOSDefaultValue from "./is-aos-default-value";
 
+// console.log("Mirror True", isAOSDefaultValue("mirror", true));
+// console.log("Mirror False", isAOSDefaultValue("mirror", false));
 /**
  * Add custom attribute for mobile visibility.
  *
@@ -22,11 +26,16 @@ import { spacingControlOptions } from "./aos-data-options";
 function addAttributes(settings) {
 	//add allowedBlocks restriction
 	if (allowedBlocks.includes(settings.name)) {
+		console.log(getAOSDefaultValue("mirror"));
 		// Use Lodash's assign to gracefully handle if attributes are undefined
 		settings.attributes = assign(settings.attributes, {
 			aosData: {
 				type: "string",
 				default: ""
+			},
+			aosMirror: {
+				type: "boolean",
+				default: getAOSDefaultValue("mirror")
 			}
 		});
 	}
@@ -46,7 +55,7 @@ addFilter("blocks.registerBlockType", "aos/custom-attributes", addAttributes);
 const withAdvancedControls = createHigherOrderComponent(BlockEdit => {
 	return props => {
 		const { name, attributes, setAttributes, isSelected } = props;
-		const { aosData } = attributes;
+		const { aosData, aosMirror } = attributes;
 
 		if (!allowedBlocks.includes(name)) {
 			return <BlockEdit {...props} />;
@@ -66,7 +75,18 @@ const withAdvancedControls = createHigherOrderComponent(BlockEdit => {
 									aosData: selectedAOSData
 								});
 							}}
-							// onChange={() => console.log(this)}
+						/>
+						<ToggleControl
+							label={__("aos-mirror")}
+							checked={aosMirror}
+							help={__(
+								"whether elements should animate out while scrolling past them"
+							)}
+							onChange={selectedAOSMirror => {
+								setAttributes({
+									aosMirror: selectedAOSMirror
+								});
+							}}
 						/>
 					</PanelBody>
 				</InspectorControls>
@@ -78,8 +98,8 @@ const withAdvancedControls = createHigherOrderComponent(BlockEdit => {
 addFilter("editor.BlockEdit", "aos/blockeditor", withAdvancedControls);
 
 /**
- * Override props assigned to save component to inject anchor ID, if block
- * supports anchor. This is only applied if the block's save result is an
+ * Override props assigned to save component to inject AOS Data.
+ * This is only applied if the block's save result is an
  * element and not a markup string.
  *
  * @param {Object} extraProps Additional props applied to save element.
@@ -93,9 +113,14 @@ function addSaveProps(extraProps, blockType, attributes) {
 		return extraProps;
 	}
 
-	const { aosData } = attributes;
+	const { aosData, aosMirror } = attributes;
 
 	if (aosData) {
+		// Assign aos-mirror if not default value
+		if (!isAOSDefaultValue("mirror", aosMirror)) {
+			lodash.assign(extraProps, { "data-aos-mirror": aosMirror });
+		}
+
 		return lodash.assign(extraProps, { "data-aos": aosData });
 
 		console.log(aosData);
@@ -113,7 +138,7 @@ function addSaveProps(extraProps, blockType, attributes) {
 
 wp.hooks.addFilter(
 	"blocks.getSaveContent.extraProps",
-	"my-plugin/add-background-color-style",
+	"aos/add-extraProps",
 	addSaveProps
 );
 

@@ -134,6 +134,26 @@ var spacingControlOptions = [{
 
 /***/ }),
 
+/***/ "./src/get-aos-default-value.js":
+/*!**************************************!*\
+  !*** ./src/get-aos-default-value.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (aosVariable) {
+  switch (aosVariable) {
+    case "mirror":
+      return false;
+  }
+
+  return "ERROR in AOS";
+});
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -156,8 +176,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _aos_data_options__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./aos-data-options */ "./src/aos-data-options.js");
+/* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
+/* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
 
-// import { assign } from "@wordpress/lodash";
 var _lodash = lodash,
     assign = _lodash.assign;
 
@@ -167,6 +188,11 @@ var _lodash = lodash,
 
 
 var allowedBlocks = ["core/image", "core/paragraph"];
+ // import { getAOSDefaultValue } from "./aos-default";
+
+
+ // console.log("Mirror True", isAOSDefaultValue("mirror", true));
+// console.log("Mirror False", isAOSDefaultValue("mirror", false));
 
 /**
  * Add custom attribute for mobile visibility.
@@ -179,11 +205,16 @@ var allowedBlocks = ["core/image", "core/paragraph"];
 function addAttributes(settings) {
   //add allowedBlocks restriction
   if (allowedBlocks.includes(settings.name)) {
-    // Use Lodash's assign to gracefully handle if attributes are undefined
+    console.log(Object(_get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__["default"])("mirror")); // Use Lodash's assign to gracefully handle if attributes are undefined
+
     settings.attributes = assign(settings.attributes, {
       aosData: {
         type: "string",
         default: ""
+      },
+      aosMirror: {
+        type: "boolean",
+        default: Object(_get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__["default"])("mirror")
       }
     });
   }
@@ -206,7 +237,8 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
         attributes = props.attributes,
         setAttributes = props.setAttributes,
         isSelected = props.isSelected;
-    var aosData = attributes.aosData;
+    var aosData = attributes.aosData,
+        aosMirror = attributes.aosMirror;
 
     if (!allowedBlocks.includes(name)) {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props);
@@ -223,15 +255,23 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
         setAttributes({
           aosData: selectedAOSData
         });
-      } // onChange={() => console.log(this)}
-
+      }
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["ToggleControl"], {
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("aos-mirror"),
+      checked: aosMirror,
+      help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("whether elements should animate out while scrolling past them"),
+      onChange: function onChange(selectedAOSMirror) {
+        setAttributes({
+          aosMirror: selectedAOSMirror
+        });
+      }
     }))));
   };
 }, "withAdvancedControls");
 Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__["addFilter"])("editor.BlockEdit", "aos/blockeditor", withAdvancedControls);
 /**
- * Override props assigned to save component to inject anchor ID, if block
- * supports anchor. This is only applied if the block's save result is an
+ * Override props assigned to save component to inject AOS Data.
+ * This is only applied if the block's save result is an
  * element and not a markup string.
  *
  * @param {Object} extraProps Additional props applied to save element.
@@ -246,9 +286,17 @@ function addSaveProps(extraProps, blockType, attributes) {
     return extraProps;
   }
 
-  var aosData = attributes.aosData;
+  var aosData = attributes.aosData,
+      aosMirror = attributes.aosMirror;
 
   if (aosData) {
+    // Assign aos-mirror if not default value
+    if (!Object(_is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__["default"])("mirror", aosMirror)) {
+      lodash.assign(extraProps, {
+        "data-aos-mirror": aosMirror
+      });
+    }
+
     return lodash.assign(extraProps, {
       "data-aos": aosData
     });
@@ -262,7 +310,25 @@ function addSaveProps(extraProps, blockType, attributes) {
   return extraProps; // return lodash.assign(props, { style: { backgroundColor: "red" } });
 }
 
-wp.hooks.addFilter("blocks.getSaveContent.extraProps", "my-plugin/add-background-color-style", addSaveProps); // addFilter("blocks.getSaveElement", "uikit3/image", addLightboxAttribute);
+wp.hooks.addFilter("blocks.getSaveContent.extraProps", "aos/add-extraProps", addSaveProps); // addFilter("blocks.getSaveElement", "uikit3/image", addLightboxAttribute);
+
+/***/ }),
+
+/***/ "./src/is-aos-default-value.js":
+/*!*************************************!*\
+  !*** ./src/is-aos-default-value.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
+
+/* harmony default export */ __webpack_exports__["default"] = (function (aosVariable, aosValue) {
+  var aosDefaultValue = Object(_get_aos_default_value__WEBPACK_IMPORTED_MODULE_0__["default"])(aosVariable);
+  return aosDefaultValue == aosValue;
+});
 
 /***/ }),
 
