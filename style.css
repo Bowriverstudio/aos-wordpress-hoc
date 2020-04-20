@@ -10,3 +10,37 @@
 	color: #fff;
 	padding: 2px;
 }
+/* 
+.figure-label {
+	color: blue;
+	@at-root {
+		figcaption #{&} {
+			color: green !important;
+		}
+	}
+} */
+
+.figure-label {
+	font-size: 40px;
+
+	/* @at-root {
+		figcaption#{&} {
+			color: #ff6666;
+		}
+	} */
+}
+.figure-label {
+	position: relative;
+}
+
+.figure-label figcaption {
+	position: absolute;
+	bottom: -14px;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 1rem;
+	font-weight: bold;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.5);
+	text-align: left;
+}

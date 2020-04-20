@@ -13,9 +13,8 @@ import { spacingControlOptions } from "./aos-data-options";
 // import { getAOSDefaultValue } from "./aos-default";
 import getAOSDefaultValue from "./get-aos-default-value";
 import isAOSDefaultValue from "./is-aos-default-value";
+import options from "./options";
 
-// console.log("Mirror True", isAOSDefaultValue("mirror", true));
-// console.log("Mirror False", isAOSDefaultValue("mirror", false));
 /**
  * Add custom attribute for mobile visibility.
  *
@@ -65,11 +64,11 @@ const withAdvancedControls = createHigherOrderComponent(BlockEdit => {
 			<Fragment>
 				<BlockEdit {...props} />
 				<InspectorControls>
-					<PanelBody title={__("AOS")} initialOpen={false}>
+					<PanelBody title={__("AOS")} initialOpen={true}>
 						<SelectControl
 							label={__("aos-data")}
 							value={aosData}
-							options={spacingControlOptions}
+							options={options.data}
 							onChange={selectedAOSData => {
 								setAttributes({
 									aosData: selectedAOSData

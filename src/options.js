@@ -1,7 +1,8 @@
-// Available spacing control options
 import { __ } from "@wordpress/i18n";
 
-export const getAOSDefaultValue = [
+const options = {};
+
+options.data = [
 	{
 		label: __("None"),
 		value: ""
@@ -43,3 +44,5 @@ export const getAOSDefaultValue = [
 		value: "fade-down-left"
 	}
 ];
+
+export default options;

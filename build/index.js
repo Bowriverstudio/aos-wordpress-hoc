@@ -90,17 +90,17 @@
 /*!*********************************!*\
   !*** ./src/aos-data-options.js ***!
   \*********************************/
-/*! exports provided: spacingControlOptions */
+/*! exports provided: getAOSDefaultValue */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "spacingControlOptions", function() { return spacingControlOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAOSDefaultValue", function() { return getAOSDefaultValue; });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
 // Available spacing control options
 
-var spacingControlOptions = [{
+var getAOSDefaultValue = [{
   label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("None"),
   value: ""
 }, {
@@ -178,6 +178,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _aos_data_options__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./aos-data-options */ "./src/aos-data-options.js");
 /* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
 /* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./options */ "./src/options.js");
 
 var _lodash = lodash,
     assign = _lodash.assign;
@@ -191,8 +192,7 @@ var allowedBlocks = ["core/image", "core/paragraph"];
  // import { getAOSDefaultValue } from "./aos-default";
 
 
- // console.log("Mirror True", isAOSDefaultValue("mirror", true));
-// console.log("Mirror False", isAOSDefaultValue("mirror", false));
+
 
 /**
  * Add custom attribute for mobile visibility.
@@ -246,11 +246,11 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
 
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("AOS"),
-      initialOpen: false
+      initialOpen: true
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["SelectControl"], {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])("aos-data"),
       value: aosData,
-      options: _aos_data_options__WEBPACK_IMPORTED_MODULE_6__["spacingControlOptions"],
+      options: _options__WEBPACK_IMPORTED_MODULE_9__["default"].data,
       onChange: function onChange(selectedAOSData) {
         setAttributes({
           aosData: selectedAOSData
@@ -329,6 +329,54 @@ __webpack_require__.r(__webpack_exports__);
   var aosDefaultValue = Object(_get_aos_default_value__WEBPACK_IMPORTED_MODULE_0__["default"])(aosVariable);
   return aosDefaultValue == aosValue;
 });
+
+/***/ }),
+
+/***/ "./src/options.js":
+/*!************************!*\
+  !*** ./src/options.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
+
+var options = {};
+options.data = [{
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("None"),
+  value: ""
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade"),
+  value: "fade"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-up"),
+  value: "fade-up"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-down"),
+  value: "fade-down"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-left"),
+  value: "fade-left"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-right"),
+  value: "fade-right"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-up-right"),
+  value: "fade-up-right"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-up-left"),
+  value: "fade-up-left"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-down-right"),
+  value: "fade-down-right"
+}, {
+  label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__["__"])("fade-down-left"),
+  value: "fade-down-left"
+}];
+/* harmony default export */ __webpack_exports__["default"] = (options);
 
 /***/ }),
 
