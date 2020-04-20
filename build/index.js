@@ -134,43 +134,23 @@ var getAOSDefaultValue = [{
 
 /***/ }),
 
-/***/ "./src/get-aos-default-value.js":
-/*!**************************************!*\
-  !*** ./src/get-aos-default-value.js ***!
-  \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function (aosVariable) {
-  switch (aosVariable) {
-    case "mirror":
-      return false;
-  }
-
-  return "ERROR in AOS";
-});
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
+/***/ "./src/blocks.getSaveContent.extraProps.js":
+/*!*************************************************!*\
+  !*** ./src/blocks.getSaveContent.extraProps.js ***!
+  \*************************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
-/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
 /* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
@@ -179,7 +159,90 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
 /* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
 /* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./options */ "./src/options.js");
+var _lodash = lodash,
+    assign = _lodash.assign;
 
+
+
+
+
+
+var allowedBlocks = ["core/image", "core/paragraph"];
+ // import { getAOSDefaultValue } from "./aos-default";
+
+
+
+
+/**
+ * Override props assigned to save component to inject AOS Data.
+ * This is only applied if the block's save result is an
+ * element and not a markup string.
+ *
+ * @param {Object} extraProps Additional props applied to save element.
+ * @param {Object} blockType  Block type.
+ * @param {Object} attributes Current block attributes.
+ *
+ * @return {Object} Filtered props applied to save element.
+ */
+
+function addSaveProps(extraProps, blockType, attributes) {
+  if (!allowedBlocks.includes(blockType.name)) {
+    return extraProps;
+  }
+
+  var aosData = attributes.aosData,
+      aosMirror = attributes.aosMirror;
+
+  if (aosData) {
+    // Assign aos-mirror if not default value
+    if (!Object(_is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__["default"])("mirror", aosMirror)) {
+      lodash.assign(extraProps, {
+        "data-aos-mirror": aosMirror
+      });
+    }
+
+    return lodash.assign(extraProps, {
+      "data-aos": aosData
+    });
+    console.log(aosData);
+    console.log(extraProps);
+    console.log("Name");
+    console.log(blockType.name);
+    console.log(attributes);
+  }
+
+  return extraProps; // return lodash.assign(props, { style: { backgroundColor: "red" } });
+}
+
+wp.hooks.addFilter("blocks.getSaveContent.extraProps", "aos/add-extraProps", addSaveProps);
+
+/***/ }),
+
+/***/ "./src/blocks.registerBlockType.js":
+/*!*****************************************!*\
+  !*** ./src/blocks.registerBlockType.js ***!
+  \*****************************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _aos_data_options__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./aos-data-options */ "./src/aos-data-options.js");
+/* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
+/* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./options */ "./src/options.js");
 var _lodash = lodash,
     assign = _lodash.assign;
 
@@ -223,6 +286,49 @@ function addAttributes(settings) {
 }
 
 Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__["addFilter"])("blocks.registerBlockType", "aos/custom-attributes", addAttributes);
+
+/***/ }),
+
+/***/ "./src/editor.BlockEdit.js":
+/*!*********************************!*\
+  !*** ./src/editor.BlockEdit.js ***!
+  \*********************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _aos_data_options__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./aos-data-options */ "./src/aos-data-options.js");
+/* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
+/* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./options */ "./src/options.js");
+
+var _lodash = lodash,
+    assign = _lodash.assign;
+
+
+
+
+
+
+var allowedBlocks = ["core/image", "core/paragraph"];
+ // import { getAOSDefaultValue } from "./aos-default";
+
+
+
+
 /**
  * Add mobile visibility controls on Advanced Block Panel.
  *
@@ -269,48 +375,74 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
   };
 }, "withAdvancedControls");
 Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__["addFilter"])("editor.BlockEdit", "aos/blockeditor", withAdvancedControls);
-/**
- * Override props assigned to save component to inject AOS Data.
- * This is only applied if the block's save result is an
- * element and not a markup string.
- *
- * @param {Object} extraProps Additional props applied to save element.
- * @param {Object} blockType  Block type.
- * @param {Object} attributes Current block attributes.
- *
- * @return {Object} Filtered props applied to save element.
- */
 
-function addSaveProps(extraProps, blockType, attributes) {
-  if (!allowedBlocks.includes(blockType.name)) {
-    return extraProps;
+/***/ }),
+
+/***/ "./src/get-aos-default-value.js":
+/*!**************************************!*\
+  !*** ./src/get-aos-default-value.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (aosVariable) {
+  switch (aosVariable) {
+    case "mirror":
+      return false;
   }
 
-  var aosData = attributes.aosData,
-      aosMirror = attributes.aosMirror;
+  return "ERROR in AOS";
+});
 
-  if (aosData) {
-    // Assign aos-mirror if not default value
-    if (!Object(_is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__["default"])("mirror", aosMirror)) {
-      lodash.assign(extraProps, {
-        "data-aos-mirror": aosMirror
-      });
-    }
+/***/ }),
 
-    return lodash.assign(extraProps, {
-      "data-aos": aosData
-    });
-    console.log(aosData);
-    console.log(extraProps);
-    console.log("Name");
-    console.log(blockType.name);
-    console.log(attributes);
-  }
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-  return extraProps; // return lodash.assign(props, { style: { backgroundColor: "red" } });
-}
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/hooks */ "@wordpress/hooks");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _aos_data_options__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./aos-data-options */ "./src/aos-data-options.js");
+/* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
+/* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
+/* harmony import */ var _options__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./options */ "./src/options.js");
+/* harmony import */ var _blocks_registerBlockType__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./blocks.registerBlockType */ "./src/blocks.registerBlockType.js");
+/* harmony import */ var _blocks_getSaveContent_extraProps__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./blocks.getSaveContent.extraProps */ "./src/blocks.getSaveContent.extraProps.js");
+/* harmony import */ var _editor_BlockEdit__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./editor.BlockEdit */ "./src/editor.BlockEdit.js");
+var _lodash = lodash,
+    assign = _lodash.assign;
 
-wp.hooks.addFilter("blocks.getSaveContent.extraProps", "aos/add-extraProps", addSaveProps); // addFilter("blocks.getSaveElement", "uikit3/image", addLightboxAttribute);
+
+
+
+
+
+var allowedBlocks = ["core/image", "core/paragraph"];
+ // import { getAOSDefaultValue } from "./aos-default";
+
+
+
+
+
+
+ // addFilter("blocks.getSaveElement", "uikit3/image", addLightboxAttribute);
 
 /***/ }),
 
