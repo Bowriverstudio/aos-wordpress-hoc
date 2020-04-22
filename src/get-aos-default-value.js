@@ -1,8 +1,10 @@
-export default function(aosVariable) {
-	switch (aosVariable) {
-		case "mirror":
+export default function( aosVariable ) {
+	switch ( aosVariable ) {
+		case 'mirror':
+			return false;
+		case 'once':
 			return false;
 	}
 
-	return "ERROR in AOS";
+	return 'ERROR in AOS';
 }

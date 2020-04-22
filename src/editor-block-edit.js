@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
 const allowedBlocks = [ 'core/image', 'core/paragraph' ];
-import options from './options';
 
 import { spacingControlOptions } from './aos-data-options';
 // import { getAOSDefaultValue } from "./aos-default";
@@ -66,11 +65,11 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			<Fragment>
 				<BlockEdit { ...props } />
 				<InspectorControls>
-					<PanelBody title={ __( 'AOS' ) } initialOpen={ true }>
+					<PanelBody title={ __( 'AOS' ) } initialOpen={ false }>
 						<SelectControl
 							label={ __( 'aos-data' ) }
 							value={ aosData }
-							options={ options.data }
+							options={ spacingControlOptions }
 							onChange={ ( selectedAOSData ) => {
 								setAttributes( {
 									aosData: selectedAOSData,

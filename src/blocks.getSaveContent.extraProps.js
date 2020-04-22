@@ -1,19 +1,8 @@
-const { assign } = lodash;
+import { assign } from '@wordpress/Lodash';
 
-import { PanelBody, SelectControl, ToggleControl } from "@wordpress/components";
-import { createHigherOrderComponent } from "@wordpress/compose";
-import { InspectorControls } from "@wordpress/editor";
-import { Fragment } from "@wordpress/element";
-import { addFilter } from "@wordpress/hooks";
-import { __ } from "@wordpress/i18n";
+const allowedBlocks = [ 'core/image', 'core/paragraph' ];
 
-const allowedBlocks = ["core/image", "core/paragraph"];
-
-import { spacingControlOptions } from "./aos-data-options";
-// import { getAOSDefaultValue } from "./aos-default";
-import getAOSDefaultValue from "./get-aos-default-value";
-import isAOSDefaultValue from "./is-aos-default-value";
-import options from "./options";
+import isAOSDefaultValue from './is-aos-default-value';
 
 /**
  * Override props assigned to save component to inject AOS Data.
@@ -26,27 +15,29 @@ import options from "./options";
  *
  * @return {Object} Filtered props applied to save element.
  */
-function addSaveProps(extraProps, blockType, attributes) {
-	if (!allowedBlocks.includes(blockType.name)) {
+function addSaveProps( extraProps, blockType, attributes ) {
+	if ( ! allowedBlocks.includes( blockType.name ) ) {
 		return extraProps;
 	}
 
-	const { aosData, aosMirror } = attributes;
+	const { aosData, aosMirror, aosOnce } = attributes;
 
-	if (aosData) {
+	if ( aosData ) {
 		// Assign aos-mirror if not default value
-		if (!isAOSDefaultValue("mirror", aosMirror)) {
-			lodash.assign(extraProps, { "data-aos-mirror": aosMirror });
+		if ( ! isAOSDefaultValue( 'mirror', aosMirror ) ) {
+			assign( extraProps, {
+				'data-aos-mirror': aosMirror,
+			} );
 		}
 
-		return lodash.assign(extraProps, { "data-aos": aosData });
+		// Assign aos-mirror if not default value
+		if ( ! isAOSDefaultValue( 'once', aosOnce ) ) {
+			assign( extraProps, {
+				'data-aos-once': aosOnce,
+			} );
+		}
 
-		console.log(aosData);
-
-		console.log(extraProps);
-		console.log("Name");
-		console.log(blockType.name);
-		console.log(attributes);
+		return assign( extraProps, { 'data-aos': aosData } );
 	}
 
 	return extraProps;
@@ -55,7 +46,7 @@ function addSaveProps(extraProps, blockType, attributes) {
 }
 
 wp.hooks.addFilter(
-	"blocks.getSaveContent.extraProps",
-	"aos/add-extraProps",
+	'blocks.getSaveContent.extraProps',
+	'aos/add-extraProps',
 	addSaveProps
 );
