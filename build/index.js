@@ -134,6 +134,25 @@ var getAOSDefaultValue = [{
 
 /***/ }),
 
+/***/ "./src/defaultValue.js":
+/*!*****************************!*\
+  !*** ./src/defaultValue.js ***!
+  \*****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var aosDefaultValue = {
+  data: "",
+  mirror: false,
+  offset: 200,
+  once: false
+};
+/* harmony default export */ __webpack_exports__["default"] = (aosDefaultValue);
+
+/***/ }),
+
 /***/ "./src/get-aos-default-value.js":
 /*!**************************************!*\
   !*** ./src/get-aos-default-value.js ***!
@@ -182,6 +201,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _aos_data_options__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./aos-data-options */ "./src/aos-data-options.js");
 /* harmony import */ var _get_aos_default_value__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./get-aos-default-value */ "./src/get-aos-default-value.js");
 /* harmony import */ var _is_aos_default_value__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./is-aos-default-value */ "./src/is-aos-default-value.js");
+/* harmony import */ var _defaultValue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./defaultValue */ "./src/defaultValue.js");
 
 var _lodash = lodash,
     assign = _lodash.assign;
@@ -194,6 +214,7 @@ var _lodash = lodash,
 var allowedBlocks = ['core/image', 'core/paragraph'];
 
  // import { getAOSDefaultValue } from "./aos-default";
+
 
 
  // console.log("Mirror True", isAOSDefaultValue("mirror", true));
@@ -220,6 +241,10 @@ function addAttributes(settings) {
       aosMirror: {
         type: 'boolean',
         default: Object(_get_aos_default_value__WEBPACK_IMPORTED_MODULE_8__["default"])('mirror')
+      },
+      aosOnce: {
+        type: 'boolean',
+        default: _defaultValue__WEBPACK_IMPORTED_MODULE_10__["default"].once
       }
     });
   }
@@ -243,7 +268,8 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
         setAttributes = props.setAttributes,
         isSelected = props.isSelected;
     var aosData = attributes.aosData,
-        aosMirror = attributes.aosMirror;
+        aosMirror = attributes.aosMirror,
+        aosOnce = attributes.aosOnce;
 
     if (!allowedBlocks.includes(name)) {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(BlockEdit, props);
@@ -270,6 +296,15 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_2_
           aosMirror: selectedAOSMirror
         });
       }
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["ToggleControl"], {
+      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('aos-once'),
+      checked: aosOnce,
+      help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__["__"])('whether animation should happen only once - while scrolling down'),
+      onChange: function onChange(selected) {
+        setAttributes({
+          aosOnce: selected
+        });
+      }
     }))));
   };
 }, 'withAdvancedControls');
@@ -292,13 +327,20 @@ function addSaveProps(extraProps, blockType, attributes) {
   }
 
   var aosData = attributes.aosData,
-      aosMirror = attributes.aosMirror;
+      aosMirror = attributes.aosMirror,
+      aosOnce = attributes.aosOnce;
 
   if (aosData) {
     // Assign aos-mirror if not default value
     if (!Object(_is_aos_default_value__WEBPACK_IMPORTED_MODULE_9__["default"])('mirror', aosMirror)) {
       lodash.assign(extraProps, {
         'data-aos-mirror': aosMirror
+      });
+    }
+
+    if (!Object(_is_aos_default_value__WEBPACK_IMPORTED_MODULE_9__["default"])('once', aosMirror)) {
+      lodash.assign(extraProps, {
+        'data-aos-once': aosOnce
       });
     }
 

@@ -14,6 +14,7 @@ import { spacingControlOptions } from './aos-data-options';
 // import { getAOSDefaultValue } from "./aos-default";
 import getAOSDefaultValue from './get-aos-default-value';
 import isAOSDefaultValue from './is-aos-default-value';
+import defaultValue from './defaultValue';
 
 // console.log("Mirror True", isAOSDefaultValue("mirror", true));
 // console.log("Mirror False", isAOSDefaultValue("mirror", false));
@@ -38,6 +39,10 @@ function addAttributes( settings ) {
 				type: 'boolean',
 				default: getAOSDefaultValue( 'mirror' ),
 			},
+			aosOnce: {
+				type: 'boolean',
+				default: defaultValue.once,
+			},
 		} );
 	}
 
@@ -56,7 +61,7 @@ addFilter( 'blocks.registerBlockType', 'aos/custom-attributes', addAttributes );
 const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
 		const { name, attributes, setAttributes, isSelected } = props;
-		const { aosData, aosMirror } = attributes;
+		const { aosData, aosMirror, aosOnce } = attributes;
 
 		if ( ! allowedBlocks.includes( name ) ) {
 			return <BlockEdit { ...props } />;
@@ -89,6 +94,19 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 								} );
 							} }
 						/>
+
+						<ToggleControl
+							label={ __( 'aos-once' ) }
+							checked={ aosOnce }
+							help={ __(
+								'whether animation should happen only once - while scrolling down'
+							) }
+							onChange={ ( selected ) => {
+								setAttributes( {
+									aosOnce: selected,
+								} );
+							} }
+						/>
 					</PanelBody>
 				</InspectorControls>
 			</Fragment>
@@ -114,12 +132,16 @@ function addSaveProps( extraProps, blockType, attributes ) {
 		return extraProps;
 	}
 
-	const { aosData, aosMirror } = attributes;
+	const { aosData, aosMirror, aosOnce } = attributes;
 
 	if ( aosData ) {
 		// Assign aos-mirror if not default value
 		if ( ! isAOSDefaultValue( 'mirror', aosMirror ) ) {
 			lodash.assign( extraProps, { 'data-aos-mirror': aosMirror } );
+		}
+
+		if ( ! isAOSDefaultValue( 'once', aosMirror ) ) {
+			lodash.assign( extraProps, { 'data-aos-once': aosOnce } );
 		}
 
 		return lodash.assign( extraProps, { 'data-aos': aosData } );
