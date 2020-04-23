@@ -1,5 +1,4 @@
-const { assign } = lodash;
-
+import { assign } from 'lodash';
 import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { InspectorControls } from '@wordpress/editor';
@@ -10,16 +9,8 @@ import { __ } from '@wordpress/i18n';
 const allowedBlocks = [ 'core/image', 'core/paragraph' ];
 import options from './options';
 
-import { spacingControlOptions } from './aos-data-options';
-// import { getAOSDefaultValue } from "./aos-default";
-import getAOSDefaultValue from './get-aos-default-value';
-import isAOSDefaultValue from './is-aos-default-value';
-import defaultValue from './defaultValue';
-
 import aosAttributes from './attributes.json';
 
-// console.log("Mirror True", isAOSDefaultValue("mirror", true));
-// console.log("Mirror False", isAOSDefaultValue("mirror", false));
 /**
  * Add custom attribute for mobile visibility.
  *
@@ -42,13 +33,13 @@ addFilter( 'blocks.registerBlockType', 'aos/custom-attributes', addAttributes );
 /**
  * Add mobile visibility controls on Advanced Block Panel.
  *
- * @param {function} BlockEdit Block edit component.
+ * @param {Function} BlockEdit Block edit component.
  *
- * @return {function} BlockEdit Modified block edit component.
+ * @return {Function} BlockEdit Modified block edit component.
  */
 const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
-		const { name, attributes, setAttributes, isSelected } = props;
+		const { name, attributes, setAttributes } = props;
 		const { aosData, aosMirror, aosOnce } = attributes;
 
 		if ( ! allowedBlocks.includes( name ) ) {
@@ -120,17 +111,17 @@ function addSaveProps( extraProps, blockType, attributes ) {
 		return extraProps;
 	}
 
-	const { aosData, aosMirror, aosOnce } = attributes;
+	const { aosData } = attributes;
 
 	if ( aosData ) {
 		// Loop through all AOS attributes
 		// if they are different than the default value save them.
 		Object.entries( aosAttributes ).forEach( ( entry ) => {
-			let key = entry[ 0 ];
-			if ( attributes[ key ] != aosAttributes[ key ][ 'default' ] ) {
-				let aosAttribute = entry[ 1 ][ 'aos-attribute' ];
+			const key = entry[ 0 ];
+			if ( attributes[ key ] !== aosAttributes[ key ].default ) {
+				const aosAttribute = entry[ 1 ][ 'aos-attribute' ];
 
-				lodash.assign( extraProps, {
+				assign( extraProps, {
 					[ aosAttribute ]: attributes[ key ],
 				} );
 			}
