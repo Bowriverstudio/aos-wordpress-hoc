@@ -1,0 +1,17 @@
+{
+	"aosData": {
+		"type": "string",
+		"default": "",
+		"aos-attribute": "data-aos"
+	},
+	"aosMirror": {
+		"type": "boolean",
+		"default": false,
+		"aos-attribute": "data-aos-mirror"
+	},
+	"aosOnce": {
+		"type": "boolean",
+		"default": false,
+		"aos-attribute": "data-aos-once"
+	}
+}

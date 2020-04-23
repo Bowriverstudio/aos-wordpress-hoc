@@ -16,6 +16,8 @@ import getAOSDefaultValue from './get-aos-default-value';
 import isAOSDefaultValue from './is-aos-default-value';
 import defaultValue from './defaultValue';
 
+import aosAttributes from './attributes.json';
+
 // console.log("Mirror True", isAOSDefaultValue("mirror", true));
 // console.log("Mirror False", isAOSDefaultValue("mirror", false));
 /**
@@ -28,22 +30,8 @@ import defaultValue from './defaultValue';
 function addAttributes( settings ) {
 	//add allowedBlocks restriction
 	if ( allowedBlocks.includes( settings.name ) ) {
-		console.log( getAOSDefaultValue( 'mirror' ) );
 		// Use Lodash's assign to gracefully handle if attributes are undefined
-		settings.attributes = assign( settings.attributes, {
-			aosData: {
-				type: 'string',
-				default: '',
-			},
-			aosMirror: {
-				type: 'boolean',
-				default: getAOSDefaultValue( 'mirror' ),
-			},
-			aosOnce: {
-				type: 'boolean',
-				default: defaultValue.once,
-			},
-		} );
+		settings.attributes = assign( settings.attributes, aosAttributes );
 	}
 
 	return settings;
@@ -135,28 +123,21 @@ function addSaveProps( extraProps, blockType, attributes ) {
 	const { aosData, aosMirror, aosOnce } = attributes;
 
 	if ( aosData ) {
-		// Assign aos-mirror if not default value
-		if ( ! isAOSDefaultValue( 'mirror', aosMirror ) ) {
-			lodash.assign( extraProps, { 'data-aos-mirror': aosMirror } );
-		}
+		// Loop through all AOS attributes
+		// if they are different than the default value save them.
+		Object.entries( aosAttributes ).forEach( ( entry ) => {
+			let key = entry[ 0 ];
+			if ( attributes[ key ] != aosAttributes[ key ][ 'default' ] ) {
+				let aosAttribute = entry[ 1 ][ 'aos-attribute' ];
 
-		if ( ! isAOSDefaultValue( 'once', aosMirror ) ) {
-			lodash.assign( extraProps, { 'data-aos-once': aosOnce } );
-		}
-
-		return lodash.assign( extraProps, { 'data-aos': aosData } );
-
-		console.log( aosData );
-
-		console.log( extraProps );
-		console.log( 'Name' );
-		console.log( blockType.name );
-		console.log( attributes );
+				lodash.assign( extraProps, {
+					[ aosAttribute ]: attributes[ key ],
+				} );
+			}
+		} );
 	}
 
 	return extraProps;
-
-	// return lodash.assign(props, { style: { backgroundColor: "red" } });
 }
 
 wp.hooks.addFilter(
