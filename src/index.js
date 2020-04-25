@@ -1,5 +1,10 @@
 import { assign } from 'lodash';
-import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import {
+	PanelBody,
+	SelectControl,
+	TextControl,
+	ToggleControl,
+} from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { InspectorControls } from '@wordpress/editor';
 import { Fragment } from '@wordpress/element';
@@ -20,6 +25,7 @@ import aosAttributes from './attributes.json';
  */
 function addAttributes( settings ) {
 	//add allowedBlocks restriction
+	console.log( 'ADD addAttributes' );
 	if ( allowedBlocks.includes( settings.name ) ) {
 		// Use Lodash's assign to gracefully handle if attributes are undefined
 		settings.attributes = assign( settings.attributes, aosAttributes );
@@ -39,12 +45,24 @@ addFilter( 'blocks.registerBlockType', 'aos/custom-attributes', addAttributes );
  */
 const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
-		const { name, attributes, setAttributes } = props;
-		const { aosData, aosMirror, aosOnce } = attributes;
+		const { name, attributes, setAttributes, isSelected } = props;
 
-		if ( ! allowedBlocks.includes( name ) ) {
+		if ( ! allowedBlocks.includes( name ) || ! isSelected ) {
 			return <BlockEdit { ...props } />;
 		}
+
+		console.log( props );
+		const {
+			aosData,
+			aosOffset,
+			aosDelay,
+			aosDuration,
+			aosEasing,
+			aosMirror,
+			aosOnce,
+			aosAnchorPlacement,
+		} = attributes;
+		console.log( attributes );
 
 		return (
 			<Fragment>
@@ -55,9 +73,77 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 							label={ __( 'aos-data' ) }
 							value={ aosData }
 							options={ options.data }
-							onChange={ ( selectedAOSData ) => {
+							onChange={ ( aosData ) => {
 								setAttributes( {
-									aosData: selectedAOSData,
+									aosData,
+								} );
+							} }
+						/>
+						<TextControl
+							label={ __( 'aos-data-offset' ) }
+							value={ aosOffset }
+							onChange={ ( selectedAOSOffset ) =>
+								setAttributes( {
+									aosOffset: selectedAOSOffset,
+								} )
+							}
+							help={ __(
+								' offset (in px) from the original trigger point'
+							) }
+							type="number"
+						/>
+						<TextControl
+							label={ __( 'aos-data-delay' ) }
+							value={ aosDelay }
+							onChange={ ( aosDelay ) =>
+								setAttributes( {
+									aosDelay,
+								} )
+							}
+							help={ __(
+								'values from 0 to 3000, with step 50ms'
+							) }
+							type="number"
+							step="50"
+							min="0"
+							max="3000"
+						/>
+						<TextControl
+							label={ __( 'aos-data-duration' ) }
+							value={ aosDuration }
+							onChange={ ( aosDuration ) =>
+								setAttributes( {
+									aosDuration,
+								} )
+							}
+							help={ __(
+								'values from 0 to 3000, with step 50ms'
+							) }
+							type="number"
+							step="50"
+							min="0"
+							max="3000"
+						/>
+						<SelectControl
+							label={ __( 'aos-easing' ) }
+							help={ __( 'easing for AOS animations' ) }
+							value={ aosEasing }
+							options={ options.easing }
+							onChange={ ( aosEasing ) => {
+								setAttributes( {
+									aosEasing,
+								} );
+							} }
+						/>
+						<ToggleControl
+							label={ __( 'aos-once' ) }
+							checked={ aosOnce }
+							help={ __(
+								'whether animation should happen only once - while scrolling down'
+							) }
+							onChange={ ( selected ) => {
+								setAttributes( {
+									aosOnce: selected,
 								} );
 							} }
 						/>
@@ -74,15 +160,16 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 							} }
 						/>
 
-						<ToggleControl
-							label={ __( 'aos-once' ) }
-							checked={ aosOnce }
+						<SelectControl
+							label={ __( 'aos-anchor-placement' ) }
 							help={ __(
-								'whether animation should happen only once - while scrolling down'
+								'defines which position of the element regarding to window should trigger the animation'
 							) }
-							onChange={ ( selected ) => {
+							value={ aosAnchorPlacement }
+							options={ options.anchorPlacement }
+							onChange={ ( aosAnchorPlacement ) => {
 								setAttributes( {
-									aosOnce: selected,
+									aosAnchorPlacement,
 								} );
 							} }
 						/>
@@ -118,6 +205,9 @@ function addSaveProps( extraProps, blockType, attributes ) {
 		// if they are different than the default value save them.
 		Object.entries( aosAttributes ).forEach( ( entry ) => {
 			const key = entry[ 0 ];
+			// console.log( key );
+			// console.log( attributes[ key ] );
+			// console.log( aosAttributes[ key ].default );
 			if ( attributes[ key ] !== aosAttributes[ key ].default ) {
 				const aosAttribute = entry[ 1 ][ 'aos-attribute' ];
 

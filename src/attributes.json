@@ -4,6 +4,26 @@
 		"default": "",
 		"aos-attribute": "data-aos"
 	},
+	"aosOffset": {
+		"type": "number",
+		"default": 120,
+		"aos-attribute": "data-aos-offset"
+	},
+	"aosDelay": {
+		"type": "number",
+		"default": 0,
+		"aos-attribute": "data-aos-delay"
+	},
+	"aosDuration": {
+		"type": "number",
+		"default": 400,
+		"aos-attribute": "data-aos-duration"
+	},
+	"aosEasing": {
+		"type": "string",
+		"default": "ease",
+		"aos-attribute": "data-aos-easing"
+	},
 	"aosMirror": {
 		"type": "boolean",
 		"default": false,
@@ -13,5 +33,10 @@
 		"type": "boolean",
 		"default": false,
 		"aos-attribute": "data-aos-once"
+	},
+	"aosAncorPlacement": {
+		"type": "string",
+		"default": "top-center",
+		"aos-attribute": "data-aos-anchor-placement"
 	}
 }
