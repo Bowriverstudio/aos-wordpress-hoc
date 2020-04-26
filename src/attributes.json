@@ -16,12 +16,12 @@
 	},
 	"aosDuration": {
 		"type": "number",
-		"default": 400,
+		"default": 1000,
 		"aos-attribute": "data-aos-duration"
 	},
 	"aosEasing": {
 		"type": "string",
-		"default": "ease",
+		"default": "ease-out-back",
 		"aos-attribute": "data-aos-easing"
 	},
 	"aosMirror": {
@@ -34,7 +34,7 @@
 		"default": false,
 		"aos-attribute": "data-aos-once"
 	},
-	"aosAncorPlacement": {
+	"aosAnchorPlacement": {
 		"type": "string",
 		"default": "top-center",
 		"aos-attribute": "data-aos-anchor-placement"

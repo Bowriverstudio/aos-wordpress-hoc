@@ -116,10 +116,10 @@ module.exports = _defineProperty;
 /*!*****************************!*\
   !*** ./src/attributes.json ***!
   \*****************************/
-/*! exports provided: aosData, aosOffset, aosDelay, aosDuration, aosEasing, aosMirror, aosOnce, aosAncorPlacement, default */
+/*! exports provided: aosData, aosOffset, aosDelay, aosDuration, aosEasing, aosMirror, aosOnce, aosAnchorPlacement, default */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"aosData\":{\"type\":\"string\",\"default\":\"\",\"aos-attribute\":\"data-aos\"},\"aosOffset\":{\"type\":\"number\",\"default\":120,\"aos-attribute\":\"data-aos-offset\"},\"aosDelay\":{\"type\":\"number\",\"default\":0,\"aos-attribute\":\"data-aos-delay\"},\"aosDuration\":{\"type\":\"number\",\"default\":400,\"aos-attribute\":\"data-aos-duration\"},\"aosEasing\":{\"type\":\"string\",\"default\":\"ease\",\"aos-attribute\":\"data-aos-easing\"},\"aosMirror\":{\"type\":\"boolean\",\"default\":false,\"aos-attribute\":\"data-aos-mirror\"},\"aosOnce\":{\"type\":\"boolean\",\"default\":false,\"aos-attribute\":\"data-aos-once\"},\"aosAncorPlacement\":{\"type\":\"string\",\"default\":\"top-center\",\"aos-attribute\":\"data-aos-anchor-placement\"}}");
+module.exports = JSON.parse("{\"aosData\":{\"type\":\"string\",\"default\":\"\",\"aos-attribute\":\"data-aos\"},\"aosOffset\":{\"type\":\"number\",\"default\":120,\"aos-attribute\":\"data-aos-offset\"},\"aosDelay\":{\"type\":\"number\",\"default\":0,\"aos-attribute\":\"data-aos-delay\"},\"aosDuration\":{\"type\":\"number\",\"default\":1000,\"aos-attribute\":\"data-aos-duration\"},\"aosEasing\":{\"type\":\"string\",\"default\":\"ease-out-back\",\"aos-attribute\":\"data-aos-easing\"},\"aosMirror\":{\"type\":\"boolean\",\"default\":false,\"aos-attribute\":\"data-aos-mirror\"},\"aosOnce\":{\"type\":\"boolean\",\"default\":false,\"aos-attribute\":\"data-aos-once\"},\"aosAnchorPlacement\":{\"type\":\"string\",\"default\":\"top-center\",\"aos-attribute\":\"data-aos-anchor-placement\"}}");
 
 /***/ }),
 
@@ -197,13 +197,12 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4_
     var name = props.name,
         attributes = props.attributes,
         setAttributes = props.setAttributes,
-        isSelected = props.isSelected;
+        isselected = props.isselected;
 
-    if (!allowedBlocks.includes(name) || !isSelected) {
+    if (!allowedBlocks.includes(name)) {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(BlockEdit, props);
     }
 
-    console.log(props);
     var aosData = attributes.aosData,
         aosOffset = attributes.aosOffset,
         aosDelay = attributes.aosDelay,
@@ -212,7 +211,6 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4_
         aosMirror = attributes.aosMirror,
         aosOnce = attributes.aosOnce,
         aosAnchorPlacement = attributes.aosAnchorPlacement;
-    console.log(attributes);
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(BlockEdit, props), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_editor__WEBPACK_IMPORTED_MODULE_5__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__["__"])('AOS'),
       initialOpen: true

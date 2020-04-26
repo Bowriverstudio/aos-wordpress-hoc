@@ -45,13 +45,12 @@ addFilter( 'blocks.registerBlockType', 'aos/custom-attributes', addAttributes );
  */
 const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
-		const { name, attributes, setAttributes, isSelected } = props;
+		const { name, attributes, setAttributes, isselected } = props;
 
-		if ( ! allowedBlocks.includes( name ) || ! isSelected ) {
+		if ( ! allowedBlocks.includes( name ) ) {
 			return <BlockEdit { ...props } />;
 		}
 
-		console.log( props );
 		const {
 			aosData,
 			aosOffset,
@@ -62,7 +61,6 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			aosOnce,
 			aosAnchorPlacement,
 		} = attributes;
-		console.log( attributes );
 
 		return (
 			<Fragment>

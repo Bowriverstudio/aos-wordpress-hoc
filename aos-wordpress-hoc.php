@@ -72,5 +72,21 @@ function create_block_aos_wordpress_hoc_block_init()
     // AOS init
     wp_enqueue_script('aos-init', plugins_url('build/aos.js', __FILE__), array('aos-js'), filemtime($dir . '/build/aos.js'), true);
 
+    // Backward compatiblity
+    if (function_exists('register_pattern')) {
+        if (is_admin()) {
+            register_pattern(
+                'my-plugin/my-awesome-pattern',
+                array(
+                    'title' => __('TEST ssss', 'my-plugin'),
+                    'content' => include $dir . "/patterns/bootstrap-demo.php",
+                )
+            );
+        }
+
+    }
+
 }
 add_action('init', 'create_block_aos_wordpress_hoc_block_init');
+// Beautify css/sass/scss/less
+// phpcs --config-set installed_path /Users/mauricetadros/.composer/vendor/wp-coding-standards
