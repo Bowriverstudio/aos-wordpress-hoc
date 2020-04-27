@@ -1,8 +1,7 @@
 <?php
 /**
- * Beans typography page installed after plugin activation.
+ * A sample pattern of images with AOS animations.
  *
- * @package beans-typography
  * @author  Maurice Tadros
  * @license GPL-2.0-or-later
  * @link    https://www.bowriverstudio.com/

@@ -1,41 +1,22 @@
 === Aos Wordpress Hoc ===
-Contributors:      The WordPress Contributors
+Contributors:      Bowriverstudio, Maurice Tadros, Disnel and 
 Tags:              block
-Requires at least: 5.3.2
-Tested up to:      5.3.2
+Requires at least: 5.4
+Tested up to:      5.4
 Stable tag:        0.1.0
 Requires PHP:      7.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block written with ESNext standard and JSX support – build step required.
+Adds attributes to support Animations on Scroll (AOS) library.
+
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+This plugin enqueues the javascript and css from AOS and adds the ability to 
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+For details on the library itself please read: https://github.com/michalsnik/aos
 
-== Installation ==
-
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload the plugin files to the `/wp-content/plugins/aos-wordpress-hoc` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-
-
-== Frequently Asked Questions ==
-
-= A question that someone might have =
-
-An answer to that question.
-
-= What about foo bar? =
-
-Answer to foo bar dilemma.
 
 == Screenshots ==
 
@@ -45,13 +26,80 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 (or jpg, jpeg, gif).
 2. This is the second screen shot
 
+== Demo ==
+
+http://michalsnik.github.io/aos/
+
+
+== Installation ==
+
+Standard Install
+
+1. Upload the plugin files to the `/wp-content/plugins/aos-wordpress-hoc` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress
+
+
+
+== Frequently Asked Questions ==
+
+= CSS Filter =
+
+By default the AOS css is enqueue from:  https://unpkg.com/aos@next/dist/aos.css
+
+To remove this use:
+
+```add_filter('aos-enqueue-style', '__return_false');```
+
+
+
+= JS Library Filter =
+
+By default the AOS js is enqueued from: https://unpkg.com/aos@next/dist/aos.js
+To remove this use:
+
+```add_filter('aos-enqueue-script', '__return_false');```
+
+= JS Library Init =
+
+The AOS init script is:
+
+```
+AOS.init( {
+	// Global settings:
+	disable: false, // accepts following values: 'phone', 'tablet', 'mobile', boolean, expression or function
+	startEvent: 'DOMContentLoaded', // name of the event dispatched on the document, that AOS should initialize on
+	initClassName: 'aos-init', // class applied after initialization
+	animatedClassName: 'aos-animate', // class applied on animation
+	useClassNames: false, // if true, will add content of `data-aos` as classes on scroll
+	disableMutationObserver: false, // disables automatic mutations' detections (advanced)
+	debounceDelay: 50, // the delay on debounce used while resizing window (advanced)
+	throttleDelay: 99, // the delay on throttle used while scrolling the page (advanced)
+
+	// Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
+	offset: 120, // offset (in px) from the original trigger point
+	delay: 0, // values from 0 to 3000, with step 50ms
+	duration: 1000, // values from 0 to 3000, with step 50ms
+	easing: 'ease-out-back', // default easing for AOS animations
+	once: false, // whether animation should happen only once - while scrolling down
+	mirror: false, // whether elements should animate out while scrolling past them
+	anchorPlacement: 'top-bottom', // defines which position of the element regarding to window should trigger the animation
+} );
+```
+It can be removed by:
+
+```add_filter('aos-enqueue-init-script', '__return_false');```
+
+
 == Changelog ==
 
 = 0.1.0 =
 * Release
 
-== Arbitrary section ==
+== Support ==
 
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+Please open an issue on github: 
+https://github.com/Bowriverstudio/aos-wordpress-hoc/issues
+
+== Github  ==
+
+https://github.com/Bowriverstudio/aos-wordpress-hoc
