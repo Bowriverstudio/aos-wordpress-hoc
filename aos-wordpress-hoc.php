@@ -75,15 +75,12 @@ function create_block_aos_wordpress_hoc_block_init()
     // Backward compatiblity
     if (function_exists('register_pattern')) {
         if (is_admin()) {
-            register_pattern(
-                'my-plugin/my-awesome-pattern',
-                array(
-                    'title' => __('TEST ssss', 'my-plugin'),
-                    'content' => include $dir . "/patterns/bootstrap-demo.php",
-                )
-            );
-        }
 
+            $pattern = include $dir . "/patterns/bootstrap-demo.php";
+            $key = $pattern['key'];
+            unset($pattern['key']);
+            register_pattern($key, $pattern);
+        }
     }
 
 }
