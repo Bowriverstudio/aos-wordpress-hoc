@@ -11,10 +11,12 @@ import { Fragment } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-const allowedBlocks = [ 'core/image', 'core/paragraph' ];
 import options from './options';
 
 import aosAttributes from './attributes.json';
+
+// TODO - add a filter to define this.
+const excludeBlocks = [];
 
 /**
  * Add custom attribute for mobile visibility.
@@ -24,9 +26,7 @@ import aosAttributes from './attributes.json';
  * @return {Object} settings Modified settings.
  */
 function addAttributes( settings ) {
-	//add allowedBlocks restriction
-	console.log( 'ADD addAttributes' );
-	if ( allowedBlocks.includes( settings.name ) ) {
+	if ( ! excludeBlocks.includes( settings.name ) ) {
 		// Use Lodash's assign to gracefully handle if attributes are undefined
 		settings.attributes = assign( settings.attributes, aosAttributes );
 	}
@@ -47,7 +47,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
 		const { name, attributes, setAttributes, isselected } = props;
 
-		if ( ! allowedBlocks.includes( name ) ) {
+		if ( excludeBlocks.includes( name ) ) {
 			return <BlockEdit { ...props } />;
 		}
 
@@ -66,7 +66,7 @@ const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
 			<Fragment>
 				<BlockEdit { ...props } />
 				<InspectorControls>
-					<PanelBody title={ __( 'AOS' ) } initialOpen={ true }>
+					<PanelBody title={ __( 'AOS' ) } initialOpen={ false }>
 						<SelectControl
 							label={ __( 'aos-data' ) }
 							value={ aosData }
@@ -192,7 +192,7 @@ addFilter( 'editor.BlockEdit', 'aos/blockeditor', withAdvancedControls );
  * @return {Object} Filtered props applied to save element.
  */
 function addSaveProps( extraProps, blockType, attributes ) {
-	if ( ! allowedBlocks.includes( blockType.name ) ) {
+	if ( excludeBlocks.includes( blockType.name ) ) {
 		return extraProps;
 	}
 
@@ -203,9 +203,7 @@ function addSaveProps( extraProps, blockType, attributes ) {
 		// if they are different than the default value save them.
 		Object.entries( aosAttributes ).forEach( ( entry ) => {
 			const key = entry[ 0 ];
-			// console.log( key );
-			// console.log( attributes[ key ] );
-			// console.log( aosAttributes[ key ].default );
+
 			if ( attributes[ key ] !== aosAttributes[ key ].default ) {
 				const aosAttribute = entry[ 1 ][ 'aos-attribute' ];
 

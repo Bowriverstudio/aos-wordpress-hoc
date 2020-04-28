@@ -160,9 +160,10 @@ var _attributes_json__WEBPACK_IMPORTED_MODULE_9___namespace = /*#__PURE__*/__web
 
 
 
-var allowedBlocks = ['core/image', 'core/paragraph'];
 
+ // TODO - add a filter to define this.
 
+var excludeBlocks = [];
 /**
  * Add custom attribute for mobile visibility.
  *
@@ -172,10 +173,7 @@ var allowedBlocks = ['core/image', 'core/paragraph'];
  */
 
 function addAttributes(settings) {
-  //add allowedBlocks restriction
-  console.log('ADD addAttributes');
-
-  if (allowedBlocks.includes(settings.name)) {
+  if (!excludeBlocks.includes(settings.name)) {
     // Use Lodash's assign to gracefully handle if attributes are undefined
     settings.attributes = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["assign"])(settings.attributes, _attributes_json__WEBPACK_IMPORTED_MODULE_9__);
   }
@@ -199,7 +197,7 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4_
         setAttributes = props.setAttributes,
         isselected = props.isselected;
 
-    if (!allowedBlocks.includes(name)) {
+    if (excludeBlocks.includes(name)) {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(BlockEdit, props);
     }
 
@@ -213,7 +211,7 @@ var withAdvancedControls = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4_
         aosAnchorPlacement = attributes.aosAnchorPlacement;
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(BlockEdit, props), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_editor__WEBPACK_IMPORTED_MODULE_5__["InspectorControls"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
       title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__["__"])('AOS'),
-      initialOpen: true
+      initialOpen: false
     }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["SelectControl"], {
       label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__["__"])('aos-data'),
       value: aosData,
@@ -314,7 +312,7 @@ Object(_wordpress_hooks__WEBPACK_IMPORTED_MODULE_6__["addFilter"])('editor.Block
  */
 
 function addSaveProps(extraProps, blockType, attributes) {
-  if (!allowedBlocks.includes(blockType.name)) {
+  if (excludeBlocks.includes(blockType.name)) {
     return extraProps;
   }
 
@@ -324,9 +322,7 @@ function addSaveProps(extraProps, blockType, attributes) {
     // Loop through all AOS attributes
     // if they are different than the default value save them.
     Object.entries(_attributes_json__WEBPACK_IMPORTED_MODULE_9__).forEach(function (entry) {
-      var key = entry[0]; // console.log( key );
-      // console.log( attributes[ key ] );
-      // console.log( aosAttributes[ key ].default );
+      var key = entry[0];
 
       if (attributes[key] !== _attributes_json__WEBPACK_IMPORTED_MODULE_9__[key].default) {
         var aosAttribute = entry[1]['aos-attribute'];
